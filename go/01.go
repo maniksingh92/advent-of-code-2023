@@ -39,11 +39,8 @@ func matchSymbol(symbols map[string]int, line string) int {
 	return -1
 }
 
-func Day01Puzzle1(inputs []string) error {
+func solveDay01(symbols map[string]int, inputs []string) error {
 	sum := 0
-
-	symbols := map[string]int{}
-	maps.Copy(symbols, digitSymbols)
 
 	for _, line := range inputs {
 		firstDigit := -1
@@ -71,35 +68,17 @@ func Day01Puzzle1(inputs []string) error {
 	return nil
 }
 
-func Day01Puzzle2(inputs []string) error {
-	sum := 0
-
+func Day01Puzzle1(inputs []string) error {
 	symbols := map[string]int{}
-	maps.Copy(symbols, wordSymbols)
 	maps.Copy(symbols, digitSymbols)
 
-	for _, line := range inputs {
-		firstDigit := -1
-		lastDigit := -1
+	return solveDay01(symbols, inputs)
+}
 
-		for i := 0; i < len(line); i++ {
-			num := matchSymbol(symbols, line[i:])
+func Day01Puzzle2(inputs []string) error {
+	symbols := map[string]int{}
+	maps.Copy(symbols, digitSymbols)
+	maps.Copy(symbols, wordSymbols)
 
-			if num == -1 {
-				continue
-			}
-
-			if firstDigit == -1 {
-				firstDigit = num
-			}
-
-			lastDigit = num
-		}
-
-		sum += firstDigit*10 + lastDigit
-	}
-
-	fmt.Println(sum)
-
-	return nil
+	return solveDay01(symbols, inputs)
 }
