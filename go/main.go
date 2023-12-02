@@ -6,6 +6,7 @@ import (
 
 var functionsByPuzzle = map[string]func(inputs []string) error{
 	"01_1": Day01Puzzle1,
+	"01_2": Day01Puzzle2,
 }
 
 func main() {

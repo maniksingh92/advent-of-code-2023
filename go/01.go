@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"strconv"
-	"unicode"
+	"maps"
+	"strings"
 )
 
 var wordSymbols = map[string]int{
@@ -30,32 +30,71 @@ var digitSymbols = map[string]int{
 	"9": 9,
 }
 
+func matchSymbol(symbols map[string]int, line string) int {
+	for symbol, value := range symbols {
+		if strings.HasPrefix(line, symbol) {
+			return value
+		}
+	}
+	return -1
+}
+
 func Day01Puzzle1(inputs []string) error {
 	sum := 0
 
+	symbols := map[string]int{}
+	maps.Copy(symbols, digitSymbols)
+
 	for _, line := range inputs {
-		fmt.Println(line)
 		firstDigit := -1
 		lastDigit := -1
 
 		for i := 0; i < len(line); i++ {
-			char := line[i]
-			if unicode.IsDigit(rune(char)) {
-				num, err := strconv.Atoi(string(char))
-				if err != nil {
-					return err
-				}
+			num := matchSymbol(symbols, line[i:])
 
-				if firstDigit == -1 {
-					firstDigit = num
-				}
-
-				lastDigit = num
+			if num == -1 {
+				continue
 			}
 
+			if firstDigit == -1 {
+				firstDigit = num
+			}
+
+			lastDigit = num
 		}
 
-		fmt.Printf("%d %d\n", firstDigit, lastDigit)
+		sum += firstDigit*10 + lastDigit
+	}
+
+	fmt.Println(sum)
+
+	return nil
+}
+
+func Day01Puzzle2(inputs []string) error {
+	sum := 0
+
+	symbols := map[string]int{}
+	maps.Copy(symbols, wordSymbols)
+	maps.Copy(symbols, digitSymbols)
+
+	for _, line := range inputs {
+		firstDigit := -1
+		lastDigit := -1
+
+		for i := 0; i < len(line); i++ {
+			num := matchSymbol(symbols, line[i:])
+
+			if num == -1 {
+				continue
+			}
+
+			if firstDigit == -1 {
+				firstDigit = num
+			}
+
+			lastDigit = num
+		}
 
 		sum += firstDigit*10 + lastDigit
 	}
