@@ -6,63 +6,61 @@ import (
 	"unicode"
 )
 
-var wordSymbols = []string{
-	"zero",
-	"one",
-	"two",
-	"three",
-	"four",
-	"five",
-	"six",
-	"seven",
-	"eight",
-	"nine",
+var wordSymbols = map[string]int{
+	"one":   1,
+	"two":   2,
+	"three": 3,
+	"four":  4,
+	"five":  5,
+	"six":   6,
+	"seven": 7,
+	"eight": 8,
+	"nine":  9,
 }
 
-var digitSymbols = []string{
-	"0",
-	"1",
-	"2",
-	"3",
-	"4",
-	"5",
-	"6",
-	"7",
-	"8",
-	"9",
+var digitSymbols = map[string]int{
+	"1": 1,
+	"2": 2,
+	"3": 3,
+	"4": 4,
+	"5": 5,
+	"6": 6,
+	"7": 7,
+	"8": 8,
+	"9": 9,
 }
 
-func Day01Puzzle1(inputs []string) {
+func Day01Puzzle1(inputs []string) error {
 	sum := 0
 
-	for _, input := range inputs {
-		// find first digit
-		var firstDigit string
-		for i := 0; i < len(input); i++ {
-			char := input[i]
+	for _, line := range inputs {
+		fmt.Println(line)
+		firstDigit := -1
+		lastDigit := -1
+
+		for i := 0; i < len(line); i++ {
+			char := line[i]
 			if unicode.IsDigit(rune(char)) {
-				firstDigit = string(char)
-				break
+				num, err := strconv.Atoi(string(char))
+				if err != nil {
+					return err
+				}
+
+				if firstDigit == -1 {
+					firstDigit = num
+				}
+
+				lastDigit = num
 			}
+
 		}
 
-		// find last digit
-		var lastDigit string
-		for i := len(input) - 1; i >= 0; i-- {
-			char := input[i]
-			if unicode.IsDigit(rune(char)) {
-				lastDigit = string(char)
-				break
-			}
-		}
+		fmt.Printf("%d %d\n", firstDigit, lastDigit)
 
-		num, err := strconv.Atoi(firstDigit + lastDigit)
-		if err != nil {
-			panic(err)
-		}
-
-		sum += num
+		sum += firstDigit*10 + lastDigit
 	}
 
 	fmt.Println(sum)
+
+	return nil
 }
