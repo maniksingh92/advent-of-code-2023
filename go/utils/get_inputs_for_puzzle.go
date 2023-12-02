@@ -11,6 +11,7 @@ import (
 
 const inputsDir string = "../inputs"
 
+// Deprecated: getFilePath is an advanced implementation not required anymore
 func getFilePath() (string, error) {
 	// accept first argument as file path if it exists
 	if len(os.Args) > 1 {
@@ -37,12 +38,7 @@ func getFilePath() (string, error) {
 	return strings.TrimSpace(line), nil
 }
 
-func ProcessInputFilePathArg() ([]string, error) {
-	filePath, err := getFilePath()
-	if err != nil {
-		return nil, err
-	}
-
+func processInputsFromFilePath(filePath string) ([]string, error) {
 	// open file
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -58,4 +54,37 @@ func ProcessInputFilePathArg() ([]string, error) {
 	}
 
 	return lines, scanner.Err()
+}
+
+func captureArguments() (string, error) {
+	if len(os.Args) > 1 {
+		return os.Args[1], nil
+	}
+
+	br := bufio.NewReader(os.Stdin)
+	fmt.Print("Enter day and puzzle (e.g. first day and second puzzle, 01_2): ")
+	line, err := br.ReadString('\n')
+	if err != nil {
+		return "", err
+	}
+
+	return strings.TrimSpace(line), nil
+}
+
+func GetInputsForPuzzle() (string, []string, error) {
+	arg, err := captureArguments()
+	if err != nil {
+		return "", nil, err
+	}
+
+	argSplit := strings.Split(arg, "_")
+	day := argSplit[0]
+	expectedInputFileFullPath := filepath.Join(inputsDir, day+".txt")
+
+	inputs, err := processInputsFromFilePath(expectedInputFileFullPath)
+	if err != nil {
+		return arg, nil, err
+	}
+
+	return arg, inputs, nil
 }
