@@ -1,4 +1,4 @@
-package main
+package day01
 
 import (
 	"maps"
@@ -30,7 +30,7 @@ var digitSymbols = map[string]int{
 	"9": 9,
 }
 
-func matchSymbolForDay01(symbols map[string]int, line string) int {
+func matchSymbol(symbols map[string]int, line string) int {
 	for symbol, value := range symbols {
 		if strings.HasPrefix(line, symbol) {
 			return value
@@ -39,7 +39,7 @@ func matchSymbolForDay01(symbols map[string]int, line string) int {
 	return -1
 }
 
-func solveDay01(symbols map[string]int, inputs []string) string {
+func solve(symbols map[string]int, inputs []string) string {
 	sum := 0
 
 	for _, line := range inputs {
@@ -47,7 +47,7 @@ func solveDay01(symbols map[string]int, inputs []string) string {
 		lastDigit := -1
 
 		for i := 0; i < len(line); i++ {
-			num := matchSymbolForDay01(symbols, line[i:])
+			num := matchSymbol(symbols, line[i:])
 
 			if num == -1 {
 				continue
@@ -70,7 +70,7 @@ func Day01Puzzle1(inputs []string) (string, error) {
 	symbols := map[string]int{}
 	maps.Copy(symbols, digitSymbols)
 
-	return solveDay01(symbols, inputs), nil
+	return solve(symbols, inputs), nil
 }
 
 func Day01Puzzle2(inputs []string) (string, error) {
@@ -78,5 +78,5 @@ func Day01Puzzle2(inputs []string) (string, error) {
 	maps.Copy(symbols, digitSymbols)
 	maps.Copy(symbols, wordSymbols)
 
-	return solveDay01(symbols, inputs), nil
+	return solve(symbols, inputs), nil
 }
