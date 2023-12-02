@@ -30,7 +30,7 @@ var digitSymbols = map[string]int{
 	"9": 9,
 }
 
-func matchSymbol(symbols map[string]int, line string) int {
+func matchSymbolForDay01(symbols map[string]int, line string) int {
 	for symbol, value := range symbols {
 		if strings.HasPrefix(line, symbol) {
 			return value
@@ -47,7 +47,7 @@ func solveDay01(symbols map[string]int, inputs []string) string {
 		lastDigit := -1
 
 		for i := 0; i < len(line); i++ {
-			num := matchSymbol(symbols, line[i:])
+			num := matchSymbolForDay01(symbols, line[i:])
 
 			if num == -1 {
 				continue
