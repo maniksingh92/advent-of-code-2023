@@ -3,12 +3,14 @@ package main
 import (
 	"fmt"
 
+	"github.com/maniksingh92/advent-of-code-2023/day02"
 	"github.com/maniksingh92/advent-of-code-2023/utils"
 )
 
 var functionsByPuzzle = map[string]func(inputs []string) (string, error){
 	"01_1": Day01Puzzle1,
 	"01_2": Day01Puzzle2,
+	"02_1": day02.Day02Puzzle1,
 }
 
 func main() {
