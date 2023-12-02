@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"maps"
+	"strconv"
 	"strings"
 )
 
@@ -39,7 +39,7 @@ func matchSymbol(symbols map[string]int, line string) int {
 	return -1
 }
 
-func solveDay01(symbols map[string]int, inputs []string) error {
+func solveDay01(symbols map[string]int, inputs []string) string {
 	sum := 0
 
 	for _, line := range inputs {
@@ -63,22 +63,20 @@ func solveDay01(symbols map[string]int, inputs []string) error {
 		sum += firstDigit*10 + lastDigit
 	}
 
-	fmt.Println(sum)
-
-	return nil
+	return strconv.Itoa(sum)
 }
 
-func Day01Puzzle1(inputs []string) error {
+func Day01Puzzle1(inputs []string) (string, error) {
 	symbols := map[string]int{}
 	maps.Copy(symbols, digitSymbols)
 
-	return solveDay01(symbols, inputs)
+	return solveDay01(symbols, inputs), nil
 }
 
-func Day01Puzzle2(inputs []string) error {
+func Day01Puzzle2(inputs []string) (string, error) {
 	symbols := map[string]int{}
 	maps.Copy(symbols, digitSymbols)
 	maps.Copy(symbols, wordSymbols)
 
-	return solveDay01(symbols, inputs)
+	return solveDay01(symbols, inputs), nil
 }
