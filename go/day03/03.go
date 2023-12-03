@@ -111,29 +111,27 @@ func (sch SchematicQueue) GetSumOfValidGearRatiosOfCurrentLine() (int, error) {
 
 				start := i
 
-				isValid := false
+				isAdjacent := false
 
 				// concatenate a numerical string
 				numStr := []rune{}
 				for i < len(currentLine) && unicode.IsDigit(currentLine[i]) {
 					numStr = append(numStr, currentLine[i])
 					// identify if the numerical string is valid
-					isValid = isValid || i == gearIdx
+					isAdjacent = isAdjacent || i == gearIdx
 					i += 1
 				}
 
-				// if valid position was not found at the indices of the numerical string,
-				// check if valid positions exist left or right of the numerical string.
 				if start != 0 && start-1 == gearIdx {
-					isValid = true
+					isAdjacent = true
 				}
 
 				if i < len(currentLine) && i == gearIdx {
-					isValid = true
+					isAdjacent = true
 				}
 
-				// does numerical string belong to valid part number?
-				if isValid {
+				// is number adjacent to a gear
+				if isAdjacent {
 					num, err := strconv.Atoi(string(numStr))
 					if err != nil {
 						return 0, err
