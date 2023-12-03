@@ -15,6 +15,7 @@ var functionsByPuzzle = map[string]func(inputs []string) (string, error){
 	"02_1": day02.Day02Puzzle1,
 	"02_2": day02.Day02Puzzle2,
 	"03_1": day03.Day03Puzzle1,
+	"03_2": day03.Day03Puzzle2,
 }
 
 func main() {
