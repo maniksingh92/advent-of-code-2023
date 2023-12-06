@@ -1,4 +1,3 @@
-from collections.abc import Iterator
 from typing import List, Tuple
 
 def parse_first_line(line: str):
@@ -21,22 +20,21 @@ def process_data_maps(lines: List[str]):
     return data_maps
 
 def day_05_puzzle_1(inputs: List[str]):
-    first_line = parse_first_line(inputs[0])
+    seeds = parse_first_line(inputs[0])
     data_maps = process_data_maps(inputs[1:])
 
-    locations: List[int] = first_line
     for data_map in data_maps:
         mapped = []
-        for curr in locations:
+        for curr in seeds:
             for destination, source, length in data_map:
                 if source <= curr <= source + length:
                     mapped.append(destination + curr - source)
                     break
             else:
                 mapped.append(curr)
-        locations = mapped
+        seeds = mapped
 
-    print(min(locations))
+    print(min(seeds))
 
 def day_05_puzzle_2(inputs: List[str]):
     first_line = parse_first_line(inputs[0])
@@ -49,19 +47,19 @@ def day_05_puzzle_2(inputs: List[str]):
     for data_map in data_maps:
         mapped: List[Tuple[int, int]] = []
         while len(seeds) > 0:
-            s, e = seeds.pop()
-            for a, b, c in data_map:
-                os = max(b, s)
-                oe = min(b+c, e)
-                if os < oe:
-                    mapped.append((a + os - b, a + oe - b))
-                    if os > s:
-                        seeds.append((s, os))
-                    if oe < e: 
-                        seeds.append((oe, e))
+            seed_start, seed_end = seeds.pop()
+            for destination_start, source_start, range_length in data_map:
+                overlap_start = max(source_start, seed_start)
+                overlap_end = min(source_start+range_length, seed_end)
+                if overlap_start < overlap_end:
+                    mapped.append((destination_start + overlap_start - source_start, destination_start + overlap_end - source_start))
+                    if overlap_start > seed_start:
+                        seeds.append((seed_start, overlap_start))
+                    if overlap_end < seed_end: 
+                        seeds.append((overlap_end, seed_end))
                     break
             else:
-                mapped.append((s, e))
+                mapped.append((seed_start, seed_end))
         seeds = mapped
     print(min(seeds))
 
