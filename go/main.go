@@ -7,6 +7,7 @@ import (
 	"github.com/maniksingh92/advent-of-code-2023/day02"
 	"github.com/maniksingh92/advent-of-code-2023/day03"
 	"github.com/maniksingh92/advent-of-code-2023/day04"
+	"github.com/maniksingh92/advent-of-code-2023/day05"
 	"github.com/maniksingh92/advent-of-code-2023/utils"
 )
 
@@ -19,6 +20,7 @@ var functionsByPuzzle = map[string]func(inputs []string) int{
 	"03_2": day03.Day03Puzzle2,
 	"04_1": day04.Day04Puzzle1,
 	"04_2": day04.Day04Puzzle2,
+	"05_1": day05.Day05Puzzle1,
 }
 
 func main() {
