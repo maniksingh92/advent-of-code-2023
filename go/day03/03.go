@@ -1,7 +1,6 @@
 package day03
 
 import (
-	"errors"
 	"strconv"
 	"unicode"
 )
@@ -16,11 +15,7 @@ func (sch SchematicQueue) Append(s string) SchematicQueue {
 	return sch[1:]
 }
 
-func (sch SchematicQueue) GetSumOfValidPartNumbersFromCurrentLine() (int, error) {
-	if len(sch) != 3 {
-		return 0, errors.New("Schematic Queue must be of length 3.")
-	}
-
+func (sch SchematicQueue) GetSumOfValidPartNumbersFromCurrentLine() int {
 	validPositions := make([]bool, len(sch[1]))
 	for _, line := range sch {
 		for i, char := range line {
@@ -65,7 +60,7 @@ func (sch SchematicQueue) GetSumOfValidPartNumbersFromCurrentLine() (int, error)
 		if isValid {
 			num, err := strconv.Atoi(string(numStr))
 			if err != nil {
-				return 0, err
+				panic(err)
 			}
 
 			validPartNumbers = append(validPartNumbers, num)
@@ -77,14 +72,10 @@ func (sch SchematicQueue) GetSumOfValidPartNumbersFromCurrentLine() (int, error)
 		sum += num
 	}
 
-	return sum, nil
+	return sum
 }
 
-func (sch SchematicQueue) GetSumOfValidGearRatiosOfCurrentLine() (int, error) {
-	if len(sch) != 3 {
-		return 0, errors.New("Schematic Queue must be of length 3.")
-	}
-
+func (sch SchematicQueue) GetSumOfValidGearRatiosOfCurrentLine() int {
 	gears := make([]bool, len(sch[1]))
 	for i, char := range sch[1] {
 		if string(char) == "*" {
@@ -134,7 +125,7 @@ func (sch SchematicQueue) GetSumOfValidGearRatiosOfCurrentLine() (int, error) {
 				if isAdjacent {
 					num, err := strconv.Atoi(string(numStr))
 					if err != nil {
-						return 0, err
+						panic(err)
 					}
 					adjacentNumbers = append(adjacentNumbers, num)
 				}
@@ -152,10 +143,10 @@ func (sch SchematicQueue) GetSumOfValidGearRatiosOfCurrentLine() (int, error) {
 		sum += num
 	}
 
-	return sum, nil
+	return sum
 }
 
-func Day03Puzzle1(inputs []string) (string, error) {
+func Day03Puzzle1(inputs []string) int {
 	if len(inputs) < 1 {
 		panic("Inputs must be provided")
 	}
@@ -169,25 +160,19 @@ func Day03Puzzle1(inputs []string) (string, error) {
 	// iterate from the next input line onwards
 	for _, input := range inputs[1:] {
 		schematicQueue = schematicQueue.Append(input)
-		sumOfCurrentLine, err := schematicQueue.GetSumOfValidPartNumbersFromCurrentLine()
-		if err != nil {
-			return "", err
-		}
+		sumOfCurrentLine := schematicQueue.GetSumOfValidPartNumbersFromCurrentLine()
 		sum += sumOfCurrentLine
 	}
 
 	// process last input line
 	schematicQueue = schematicQueue.Append("")
-	sumOfCurrentLine, err := schematicQueue.GetSumOfValidPartNumbersFromCurrentLine()
-	if err != nil {
-		return "", err
-	}
+	sumOfCurrentLine := schematicQueue.GetSumOfValidPartNumbersFromCurrentLine()
 	sum += sumOfCurrentLine
 
-	return strconv.Itoa(sum), nil
+	return sum
 }
 
-func Day03Puzzle2(inputs []string) (string, error) {
+func Day03Puzzle2(inputs []string) int {
 	if len(inputs) < 1 {
 		panic("Inputs must be provided")
 	}
@@ -201,20 +186,14 @@ func Day03Puzzle2(inputs []string) (string, error) {
 	// iterate from the next input line onwards
 	for _, input := range inputs[1:] {
 		schematicQueue = schematicQueue.Append(input)
-		sumOfCurrentLine, err := schematicQueue.GetSumOfValidGearRatiosOfCurrentLine()
-		if err != nil {
-			return "", err
-		}
+		sumOfCurrentLine := schematicQueue.GetSumOfValidGearRatiosOfCurrentLine()
 		sum += sumOfCurrentLine
 	}
 
 	// process last input line
 	schematicQueue = schematicQueue.Append("")
-	sumOfCurrentLine, err := schematicQueue.GetSumOfValidGearRatiosOfCurrentLine()
-	if err != nil {
-		return "", err
-	}
+	sumOfCurrentLine := schematicQueue.GetSumOfValidGearRatiosOfCurrentLine()
 	sum += sumOfCurrentLine
 
-	return strconv.Itoa(sum), nil
+	return sum
 }

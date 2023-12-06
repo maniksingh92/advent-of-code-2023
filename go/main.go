@@ -10,7 +10,7 @@ import (
 	"github.com/maniksingh92/advent-of-code-2023/utils"
 )
 
-var functionsByPuzzle = map[string]func(inputs []string) (string, error){
+var functionsByPuzzle = map[string]func(inputs []string) int{
 	"01_1": day01.Day01Puzzle1,
 	"01_2": day01.Day01Puzzle2,
 	"02_1": day02.Day02Puzzle1,
@@ -32,10 +32,5 @@ func main() {
 		panic("Unknown puzzle.")
 	}
 
-	answer, err := f(inputs)
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Println(answer)
+	fmt.Println(f(inputs))
 }

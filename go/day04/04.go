@@ -1,51 +1,34 @@
 package day04
 
 import (
-	"fmt"
 	"math"
 	"strconv"
 	"strings"
 )
 
-func buildUnknownLineFormatError(line string) error {
-	return fmt.Errorf("Unknown line format: %s", line)
-}
-
-func parseLine(line string) (int, []string, []string, error) {
+func parseLine(line string) (int, []string, []string) {
 	a := strings.Split(line, ":")
-	if len(a) != 2 {
-		return 0, nil, nil, buildUnknownLineFormatError(line)
-	}
 	cardMeta := a[0]
 	numbers := a[1]
 
 	b := strings.Fields(cardMeta)
-	if len(b) != 2 {
-		return 0, nil, nil, buildUnknownLineFormatError(line)
-	}
 	cardNumber, err := strconv.Atoi(b[1])
 	if err != nil {
-		return 0, nil, nil, err
+		panic(err)
 	}
 
 	c := strings.Split(numbers, "|")
-	if len(c) != 2 {
-		return 0, nil, nil, buildUnknownLineFormatError(line)
-	}
 	winningNumbers := strings.Fields(strings.TrimSpace(c[0]))
 	ticketNumbers := strings.Fields(strings.TrimSpace(c[1]))
 
-	return cardNumber, winningNumbers, ticketNumbers, nil
+	return cardNumber, winningNumbers, ticketNumbers
 }
 
-func Day04Puzzle1(lines []string) (string, error) {
+func Day04Puzzle1(lines []string) int {
 	sum := 0
 
 	for _, line := range lines {
-		_, winningNumbers, ticketNumbers, err := parseLine(line)
-		if err != nil {
-			return "", err
-		}
+		_, winningNumbers, ticketNumbers := parseLine(line)
 
 		winningNumbersMap := map[string]bool{}
 		for _, n := range winningNumbers {
@@ -69,19 +52,16 @@ func Day04Puzzle1(lines []string) (string, error) {
 		}
 	}
 
-	return strconv.Itoa(sum), nil
+	return sum
 }
 
-func Day04Puzzle2(lines []string) (string, error) {
+func Day04Puzzle2(lines []string) int {
 	sum := 0
 
 	cardCount := map[int]int{}
 
 	for _, line := range lines {
-		cardNumber, winningNumbers, ticketNumbers, err := parseLine(line)
-		if err != nil {
-			return "", err
-		}
+		cardNumber, winningNumbers, ticketNumbers := parseLine(line)
 		cardCount[cardNumber] += 1
 
 		winningNumbersMap := map[string]bool{}
@@ -112,5 +92,5 @@ func Day04Puzzle2(lines []string) (string, error) {
 		sum += count
 	}
 
-	return strconv.Itoa(sum), nil
+	return sum
 }

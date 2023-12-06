@@ -7,7 +7,7 @@ import (
 
 type gameSet map[string]int
 
-func parseGameSetStr(gameSetStr string) (gameSet, error) {
+func parseGameSetStr(gameSetStr string) gameSet {
 	cubes := strings.Split(gameSetStr, ", ")
 
 	data := gameSet{}
@@ -17,34 +17,30 @@ func parseGameSetStr(gameSetStr string) (gameSet, error) {
 		color := cube[1]
 		count, err := strconv.Atoi(cube[0])
 		if err != nil {
-			return nil, err
+			panic(err)
 		}
 
 		data[color] = count
 	}
 
-	return data, nil
+	return data
 }
 
-func parseLine(line string) (int, []gameSet, error) {
+func parseLine(line string) (int, []gameSet) {
 	record := strings.Split(line, ": ")
 	game, err := strconv.Atoi(strings.Split(record[0], " ")[1:][0])
 	if err != nil {
-		return -1, nil, err
+		panic(err)
 	}
 
 	gameSetStrs := strings.Split(record[1], "; ")
 	gameSets := []gameSet{}
 
 	for _, gameSetStr := range gameSetStrs {
-		gameSet, err := parseGameSetStr(gameSetStr)
-		if err != nil {
-			return -1, nil, err
-		}
-		gameSets = append(gameSets, gameSet)
+		gameSets = append(gameSets, parseGameSetStr(gameSetStr))
 	}
 
-	return game, gameSets, nil
+	return game, gameSets
 }
 
 var maximumAllowed = gameSet{
@@ -91,34 +87,27 @@ func getPowerForGame(gameSets []gameSet) int {
 	return power
 }
 
-func Day02Puzzle1(inputs []string) (string, error) {
+func Day02Puzzle1(inputs []string) int {
 	sum := 0
 
 	for _, line := range inputs {
-		game, gameSets, err := parseLine(line)
-		if err != nil {
-			return "", err
-		}
+		game, gameSets := parseLine(line)
 
 		if isGameValid(gameSets) {
 			sum += game
 		}
 	}
 
-	return strconv.Itoa(sum), nil
+	return sum
 }
 
-func Day02Puzzle2(inputs []string) (string, error) {
+func Day02Puzzle2(inputs []string) int {
 	sum := 0
 
 	for _, line := range inputs {
-		_, gameSets, err := parseLine(line)
-		if err != nil {
-			return "", err
-		}
-
+		_, gameSets := parseLine(line)
 		sum += getPowerForGame(gameSets)
 	}
 
-	return strconv.Itoa(sum), nil
+	return sum
 }
