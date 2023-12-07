@@ -18,8 +18,8 @@ def quadratic(a, t, d):
 with open("../inputs/06.txt") as inputs:
     lines = inputs.readlines()
 
-    times = map(int, lines[0].split(":")[1].split())
-    distances = map(int, "".join(lines[1].split(":")[1].split()))
+    times = map(int, ["".join(lines[0].split(":")[1].split())])
+    distances = map(int, ["".join(lines[1].split(":")[1].split())])
 
     time_distances = zip(times, distances)
 
