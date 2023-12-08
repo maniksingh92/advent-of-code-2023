@@ -31,31 +31,31 @@ function determineHandStrength(hand) {
 
 	if (frequency[5]) return 6;
 	if (frequency[4]) {
-		if (count["J"] === 1) return 6;
+		if (count.J === 1) return 6;
 		return 5;
 	}
 	if (frequency[3] && frequency[2]) return 4;
 	if (frequency[3]) {
-		if (count["J"] === 2) return 6;
-		if (count["J"] === 1) return 5;
+		if (count.J === 2) return 6;
+		if (count.J === 1) return 5;
 		return 3;
 	}
 	if (frequency[2] === 2) {
-		if (count["J"] === 1) return 4;
+		if (count.J === 1) return 4;
 		return 2;
 	}
 	if (frequency[2]) {
-		if (count["J"] === 3) return 6;
-		if (count["J"] === 2) return 5;
-		if (count["J"] === 1) return 3;
+		if (count.J === 3) return 6;
+		if (count.J === 2) return 5;
+		if (count.J === 1) return 3;
 		return 1;
 	}
 
-	if (count["J"] === 5) return 6;
-	if (count["J"] === 4) return 6;
-	if (count["J"] === 3) return 5;
-	if (count["J"] === 2) return 3;
-	if (count["J"] === 1) return 1;
+	if (count.J === 5) return 6;
+	if (count.J === 4) return 6;
+	if (count.J === 3) return 5;
+	if (count.J === 2) return 3;
+	if (count.J === 1) return 1;
 	return 0;
 }
 
