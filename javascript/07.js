@@ -17,8 +17,8 @@ const cardStrength = {
 };
 
 function determineHandStrength(hand) {
-	const frequency = Array(hand.length + 1).fill(0);
-	const count = {};
+	const freq = Array(hand.length + 1).fill(0);
+	const count = { J: 0 };
 
 	for (const c of hand) {
 		count[c] = 1 + (count[c] || 0);
@@ -26,37 +26,16 @@ function determineHandStrength(hand) {
 
 	for (const c in count) {
 		if (c === "J") continue;
-		frequency[count[c]] += 1;
+		freq[count[c]] += 1;
 	}
 
-	if (frequency[5]) return 6;
-	if (frequency[4]) {
-		if (count.J === 1) return 6;
-		return 5;
-	}
-	if (frequency[3] && frequency[2]) return 4;
-	if (frequency[3]) {
-		if (count.J === 2) return 6;
-		if (count.J === 1) return 5;
-		return 3;
-	}
-	if (frequency[2] === 2) {
-		if (count.J === 1) return 4;
-		return 2;
-	}
-	if (frequency[2]) {
-		if (count.J === 3) return 6;
-		if (count.J === 2) return 5;
-		if (count.J === 1) return 3;
-		return 1;
-	}
-
-	if (count.J === 5) return 6;
-	if (count.J === 4) return 6;
-	if (count.J === 3) return 5;
-	if (count.J === 2) return 3;
-	if (count.J === 1) return 1;
-	return 0;
+	if (freq[5]) return 5;
+	if (freq[4]) return 4 + count.J;
+	if ((freq[3] && freq[2]) || (freq[2] === 2 && count.J === 1)) return 3.5;
+	if (freq[3]) return 3 + count.J;
+	if (freq[2] === 2) return 2.5;
+	if (freq[2]) return 2 + count.J;
+	return Math.min(1 + count.J, 5);
 }
 
 function compareHands(b, a) {
