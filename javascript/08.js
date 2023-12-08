@@ -19,29 +19,36 @@ const dataMap = inputs
 		return acc;
 	}, {});
 
-let curr = "AAA";
-let steps = 0;
-let i = 0;
+const gcd = (a, b) => (a ? gcd(b % a, a) : b);
+const lcm = (a, b) => (a * b) / gcd(a, b);
 
-function solvePart1() {
-	while (true) {
-		if (curr === "ZZZ") break;
+function solve() {
+	const startingNodes = Object.keys(dataMap).filter((node) =>
+		node.endsWith("A"),
+	);
 
-		if (pattern[i] === "L") {
-			curr = dataMap[curr][0];
-		} else {
-			curr = dataMap[curr][1];
+	const solutions = [];
+
+	for (let curr of startingNodes) {
+		let steps = 0;
+		let i = 0;
+		while (true) {
+			if (curr.endsWith("Z")) break;
+
+			const move = pattern[i] === "L" ? 0 : 1;
+			curr = dataMap[curr][move];
+
+			steps += 1;
+
+			i += 1;
+			if (i >= pattern.length) {
+				i = 0;
+			}
 		}
-
-		steps += 1;
-
-		i += 1;
-		if (i >= pattern.length) {
-			i = 0;
-		}
+		solutions.push(steps);
 	}
+
+	console.log(solutions.reduce(lcm));
 }
 
-solvePart1();
-
-console.log(steps);
+solve();
