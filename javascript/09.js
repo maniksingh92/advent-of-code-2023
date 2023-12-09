@@ -5,11 +5,11 @@ const sequences = fs
 	.toString()
 	.trim()
 	.split("\n")
-	.map((line) => line.split(" ").map(Number));
+	.map((line) => line.split(" ").map(Number).toReversed());
 
 function findNextNumber(sequence) {
 	if (sequence.every((n) => n === 0)) {
-		return sequence[1] - sequence[0];
+		return 0;
 	}
 
 	const diff = sequence.slice(1).map((n, i) => n - sequence[i]);
