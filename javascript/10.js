@@ -21,7 +21,7 @@ function createTwoWayMap(directions) {
 	};
 }
 
-const tiles = {
+const symbols = {
 	"|": createTwoWayMap("ns"),
 	"-": createTwoWayMap("ew"),
 	L: createTwoWayMap("ne"),
@@ -30,7 +30,7 @@ const tiles = {
 	F: createTwoWayMap("se"),
 };
 
-const swapDirection = {
+const directionPair = {
 	...createTwoWayMap("ns"),
 	...createTwoWayMap("ew"),
 };
@@ -42,40 +42,70 @@ const relativePositionByDirection = {
 	w: [0, -1],
 };
 
-function navigateTile(i, j, direction) {
+function moveToDirection(i, j, direction) {
 	const [a, b] = relativePositionByDirection[direction];
 	return [i + a, j + b];
 }
 
 const nextTiles = [];
 for (const direction in relativePositionByDirection) {
-	const [x, y] = navigateTile(s[0], s[1], direction);
+	const [x, y] = moveToDirection(s[0], s[1], direction);
 	if (x < 0 || x >= inputs.length) continue;
 	if (y < 0 || y >= inputs[0].length) continue;
 
-	const swappedDirection = swapDirection[direction];
+	const swappedDirection = directionPair[direction];
 
-	if (tiles[inputs[x][y]]?.[swappedDirection]) {
+	if (symbols[inputs[x][y]]?.[swappedDirection]) {
 		nextTiles.push([x, y, swappedDirection]);
 	}
 }
 
-function processTile(i, j, directionEnteredFrom) {
-	const directionToGo = tiles[inputs[i][j]][directionEnteredFrom];
-	const [x, y] = navigateTile(i, j, directionToGo);
-	const swappedDirection = swapDirection[directionToGo];
+function navigateTile(i, j, directionEnteredFrom) {
+	const directionToGo = symbols[inputs[i][j]][directionEnteredFrom];
+	const [x, y] = moveToDirection(i, j, directionToGo);
+	const swappedDirection = directionPair[directionToGo];
 	return [x, y, swappedDirection];
 }
 
-let maxDistance = 0;
-while (true) {
-	maxDistance += 1;
-
-	const [tileA, tileB] = nextTiles;
-	if (tileA[0] === tileB[0] && tileA[1] === tileB[1]) break;
-
-	nextTiles[0] = processTile(...tileA);
-	nextTiles[1] = processTile(...tileB);
+function buildUniqueId(i, j) {
+	return `${i},${j}`;
 }
 
-console.log(maxDistance);
+const foundTiles = new Set([buildUniqueId(s[0], s[1])]);
+function traversePath() {
+	let maxDistance = 0;
+	while (true) {
+		maxDistance += 1;
+
+		const [tileA, tileB] = nextTiles;
+		foundTiles.add(buildUniqueId(tileA[0], tileA[1]));
+		foundTiles.add(buildUniqueId(tileB[0], tileB[1]));
+		if (tileA[0] === tileB[0] && tileA[1] === tileB[1]) break;
+
+		nextTiles[0] = navigateTile(...tileA);
+		nextTiles[1] = navigateTile(...tileB);
+	}
+	return maxDistance;
+}
+
+traversePath();
+const trackedSymbols = new Set("|JL");
+
+let totalContainedInsidePath = 0;
+for (let i = 0; i < inputs.length; i++) {
+	for (let j = 0; j < inputs[i].length; j++) {
+		if (foundTiles.has(buildUniqueId(i, j))) continue;
+
+		let crossed = 0;
+		for (let k = j - 1; k >= 0; k--) {
+			if (!trackedSymbols.has(inputs[i][k])) continue;
+			if (foundTiles.has(buildUniqueId(i, k))) crossed += 1;
+		}
+
+		if (crossed % 2 !== 0) {
+			totalContainedInsidePath += 1;
+		}
+	}
+}
+
+console.log(totalContainedInsidePath);
