@@ -24,11 +24,11 @@ function findDistance(a, b) {
 	let distance = 0;
 	for (let n = x1; n < x2; n++) {
 		distance += 1;
-		if (emptyRows[n]) distance += 1;
+		if (emptyRows[n]) distance += 10 ** 6 - 1;
 	}
 	for (let n = y1; n < y2; n++) {
 		distance += 1;
-		if (emptyColumns[n]) distance += 1;
+		if (emptyColumns[n]) distance += 10 ** 6 - 1;
 	}
 
 	return distance;
