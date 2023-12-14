@@ -6,6 +6,8 @@ const inputs = fs
 	.trim()
 	.split("\n");
 
+const cache = {};
+
 function countArrangements(springs, damagedGroups) {
 	// are there no more search positions?
 	if (springs.length === 0) {
@@ -23,6 +25,12 @@ function countArrangements(springs, damagedGroups) {
 
 		// valid arrangement
 		return 1;
+	}
+
+	const cacheKey = [springs, damagedGroups.join(",")].join(" ");
+
+	if (cacheKey in cache) {
+		return cache[cacheKey];
 	}
 
 	let result = 0;
@@ -43,13 +51,17 @@ function countArrangements(springs, damagedGroups) {
 		);
 	}
 
+	cache[cacheKey] = result;
+
 	return result;
 }
 
 let total = 0;
 for (const line of inputs) {
 	let [springs, damagedGroups] = line.split(" ");
+	springs = new Array(5).fill(springs).join("?");
 	damagedGroups = damagedGroups.split(",").map(Number);
+	damagedGroups = new Array(5).fill(damagedGroups).flat();
 	total += countArrangements(springs, damagedGroups);
 }
 
