@@ -1,4 +1,5 @@
 import fs from "fs";
+import { transpose } from "./util.js";
 
 const inputs = fs
 	.readFileSync("../inputs/13.txt")
@@ -7,10 +8,6 @@ const inputs = fs
 	.split("\n\n")
 	.map((grid) => grid.split("\n"))
 	.map((grid) => grid.map((line) => line.split("")));
-
-function transpose(array) {
-	return array[0].map((_, i) => array.map((line) => line[i]));
-}
 
 function findMirror(grid) {
 	for (let i = 1; i < grid.length; i++) {
