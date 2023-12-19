@@ -19,9 +19,17 @@ function findMirror(grid) {
 		above = above.slice(0, below.length);
 		below = below.slice(0, above.length);
 
-		if (above.join("") === below.join("")) {
-			return i;
-		}
+		const mismatch = above.reduce(
+			(lineCount, line, lineIdx) =>
+				lineCount +
+				line.reduce(
+					(count, ch, idx) => count + (ch === below[lineIdx][idx] ? 0 : 1),
+					0,
+				),
+			0,
+		);
+
+		if (mismatch === 1) return i;
 	}
 
 	return 0;
