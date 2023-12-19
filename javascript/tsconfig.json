@@ -1,4 +1,13 @@
 {
-	"extends": "@tsconfig/recommended/tsconfig.json",
-  "module": "nodenext"
+  "extends": "@tsconfig/recommended/tsconfig.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "noImplicitAny": false,
+    "lib": [
+      "ES2023.Array"
+    ]
+  }
 }
